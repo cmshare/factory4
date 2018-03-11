@@ -1,0 +1,13 @@
+#.gitignore
+#/hybServKit
+#/include/mc_config.h
+/uploadfiles
+/tags
+/doc
+*.o
+*.a
+*.bak
+cscope*
+smoke*
+core*
+

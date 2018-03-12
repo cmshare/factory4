@@ -47,6 +47,7 @@ static void terminal_HbTimeout(HAND ttasks,void *taskCode,U32 *taskID,char *task
   TTerminal * terminal=(TTerminal *)taskCode;
  // Log_AppendText("\r\n[HeatBeatTimeout:%s]",terminal->name);
   switch(terminal->term_type){
+#if 0
     case TT_DEVICE:{//device
              printf("dev#%d offline:\n",terminal->id);
              //释放session,并修改终端state(确定全套系统离线).
@@ -59,6 +60,7 @@ static void terminal_HbTimeout(HAND ttasks,void *taskCode,U32 *taskID,char *task
            //staticMap_generate(terminal);
          }
          break;
+#endif
     case TT_USER: //user
            db_queryf("update `ss_user` set sessionid=0,logouttime=unix_timestamp() where id=%u",terminal->id);
            TNetAddr *peerAddr=&terminal->loginAddr;

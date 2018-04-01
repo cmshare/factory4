@@ -5,16 +5,18 @@ void Handle_MSG_DSR_LOGIN(TMcPacket *packet){
   U32  sessionid=0,loginTime,deviceGroup,deviceBox;
   TMSG_DSR_LOGIN *content=(TMSG_DSR_LOGIN *)packet->msg.body;
   U32  deviceID=content->devID;
+  U32  hb_interval=0;
   U8 error_code=1,deviceExists=0;
   MYSQL_RES *res;
   session_lock(TRUE);
-  res=db_queryf("select sessionid,groupid,logintime from `ss_device` where id=%u",deviceID); 
+  res=db_queryf("select a.sessionid,a.groupid,a.logintime,b.hb_interval from `ss_device` as a left join `ss_devgroup` as b on a.groupid=b.id where a.id=%u",deviceID); 
   if(res){
     MYSQL_ROW row=mysql_fetch_row(res);
     if(row){  
       sessionid=atoi(row[0]);
       deviceGroup=atoi(row[1]);
       loginTime=atoi(row[2]);
+      if(row[3])hb_interval=atoi(row[3]);
       deviceExists=TRUE;
       if(sessionid){
         terminal=(TTerminal *)dtmr_findById(dtmr_termLinks,sessionid,TRUE); 
@@ -52,6 +54,7 @@ void Handle_MSG_DSR_LOGIN(TMcPacket *packet){
   TMcMsg *msg=msg_alloc(MSG_SDA_LOGIN,sizeof(TMSG_SDA_LOGIN));
   TMSG_SDA_LOGIN *ackBody=(TMSG_SDA_LOGIN *)msg->body;
   ackBody->sessionid=(error_code==0)?sessionid:0;
+  ackBody->hb_interval=hb_interval;
   msg_send(msg,packet,NULL);
 printf("login ret=%d session=%x\n",error_code,sessionid);
 

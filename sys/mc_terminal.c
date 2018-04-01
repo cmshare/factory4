@@ -119,7 +119,7 @@ void terminal_init(void)
     mysql_free_result(res); 
   }
 
-  res=db_query("select id,sessionid,ip,port,groupid,state,logintime from `ss_device` where sessionid<>0");
+  res=db_query("select id,sn,sessionid,ip,port,groupid,logintime from `ss_device` where sessionid<>0");
   if(res)
   { MYSQL_ROW row;
     while((row = mysql_fetch_row(res)))

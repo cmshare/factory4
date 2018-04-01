@@ -216,8 +216,10 @@ enum {DEVSTATE_OFFLINE=0,DEVSTATE_SLEEP=1,DEVSTATE_WAKEUP=2,DEVSTATE_ONLINE=3};
 //1:震动预警; 2:缺电预警 3:流量已经耗尽警告（只提醒一次） 4:流量即将耗尽预警（低于阀值每天提醒一次） 5:流量即将到期预警(最后5天每天提醒一次) 6:震动抓拍上传完毕 10：群发-其他类，11：群发-推广类，12：群发-宣传类
 enum {WARNINGMSG_VIBRATE=1,WARNINGMSG_LOWPOWER=2,WARNINGMSG_FLOWDEPLETE=3,WARNINGMSG_LOWFLOW=4,WARNINGMSG_FLOWTOEXPIRE=5,WARNINGMSG_SNAPSHOT_1=6};
 
+#define MAXLEN_SIMID     5
 typedef struct{
  U32 devID;
+ U8  simID[MAXLEN_SIMID];
  U32 version;
 }TMSG_DSR_LOGIN;
 
@@ -241,7 +243,7 @@ typedef struct
 
 typedef struct{
   U32 sessionid;
-  U32 reserved;
+  U32 hb_interval;
 }TMSG_SDA_LOGIN,TMSG_SUA_LOGIN;
 
 typedef struct
